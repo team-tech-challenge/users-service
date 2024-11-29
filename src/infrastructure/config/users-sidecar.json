@@ -1,0 +1,157 @@
+{
+	"info": {
+		"_postman_id": "55582c39-2f5b-4978-a40c-84ad3e47f8ed",
+		"name": "Tech-Challenge-Sidecar",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11088853"
+	},
+	"item": [
+		{
+			"name": "Customer",
+			"item": [
+				{
+					"name": "01",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cpf\": \"103.977.370-25\",\n  \"name\": \"Cláudia Melissa Raimunda\",\n  \"phoneNumber\": \"(31) 99999-9999\",\n  \"email\": \"claudia-cliente1@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ADDRESS}}/customer/create",
+							"host": [
+								"{{API_ADDRESS}}"
+							],
+							"path": [
+								"customer",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "02",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cpf\": \"519.109.400-03\",\n  \"name\": \"Pedro Henrique Anderson Marcos Vinicius Nascimento\",\n  \"phoneNumber\": \"(11) 99999-9999\",\n  \"email\": \"pedro-cliente2@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ADDRESS}}/customer/create",
+							"host": [
+								"{{API_ADDRESS}}"
+							],
+							"path": [
+								"customer",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "03",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cpf\": \"244.427.570-54\",\n  \"name\": \"Manuel Gael Cavalcanti\",\n  \"phoneNumber\": \"(19) 99999-9999\",\n  \"email\": \"manuel-cliente3@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ADDRESS}}/customer/create",
+							"host": [
+								"{{API_ADDRESS}}"
+							],
+							"path": [
+								"customer",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Employee",
+			"item": [
+				{
+					"name": "01",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cpf\": \"267.351.630-10\",\n  \"name\": \"Nair Alana Eduarda Cavalcanti\",\n  \"username\": \"employee@employee\",\n  \"password\": \"E$%0of323!@#\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ADDRESS}}/employee/create",
+							"host": [
+								"{{API_ADDRESS}}"
+							],
+							"path": [
+								"employee",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "API_ADDRESS",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}

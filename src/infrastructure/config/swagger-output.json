@@ -1,0 +1,390 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "v1.0.0",
+    "title": "Swagger Tech Challenge",
+    "description": "Tech Challenge API"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/customer/all": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Return all customer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customer/create": {
+      "post": {
+        "tags": [
+          "Customer"
+        ],
+        "description": "Create a new customer",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Customer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customer/search/{cpf}": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "cpf",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search customer by CPF",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customer/update/{id}": {
+      "put": {
+        "tags": [
+          "Customer"
+        ],
+        "description": "Update customer by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Customer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customer/delete/{id}": {
+      "delete": {
+        "tags": [
+          "Customer"
+        ],
+        "description": "Delete customer by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/customer/{id}/campaigns": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/employee/all": {
+      "get": {
+        "tags": [
+          "Employee"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Return all employee",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getEmployee"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/getEmployee"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/employee/create": {
+      "post": {
+        "tags": [
+          "Employee"
+        ],
+        "description": "Create a new employee",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "description": "Create Employee",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Employee"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/employee/search/{cpf}": {
+      "get": {
+        "tags": [
+          "Employee"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "cpf",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search employee by CPF",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getEmployee"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/getEmployee"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/employee/update/{id}": {
+      "put": {
+        "tags": [
+          "Employee"
+        ],
+        "description": "Update employee by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "description": "Update Employee",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Employee"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/employee/delete/{id}": {
+      "delete": {
+        "tags": [
+          "Employee"
+        ],
+        "description": "Delete employee by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Customer": {
+        "type": "object",
+        "properties": {
+          "cpf": {
+            "type": "string",
+            "example": "555.555.555-55"
+          },
+          "name": {
+            "type": "string",
+            "example": "Name of customer"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "example": "(99) 99999-9999"
+          },
+          "email": {
+            "type": "string",
+            "example": "email@example.com"
+          }
+        },
+        "xml": {
+          "name": "Customer"
+        }
+      },
+      "Employee": {
+        "type": "object",
+        "properties": {
+          "cpf": {
+            "type": "string",
+            "example": "555.555.555-55"
+          },
+          "name": {
+            "type": "string",
+            "example": "Name of employee"
+          },
+          "username": {
+            "type": "string",
+            "example": "employee@employee"
+          },
+          "password": {
+            "type": "string",
+            "example": "E$%0of323!@#"
+          }
+        },
+        "xml": {
+          "name": "Employee"
+        }
+      },
+      "getEmployee": {
+        "type": "object",
+        "properties": {
+          "cpf": {
+            "type": "string",
+            "example": "555.555.555-55"
+          },
+          "name": {
+            "type": "string",
+            "example": "Name of employee"
+          },
+          "username": {
+            "type": "string",
+            "example": "employee@employee"
+          }
+        },
+        "xml": {
+          "name": "getEmployee"
+        }
+      }
+    }
+  }
+}
