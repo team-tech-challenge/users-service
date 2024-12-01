@@ -3,6 +3,7 @@
 		"require": ["tsconfig-paths/register"]
 	},
 	"compilerOptions": {
+		"outDir": "./dist-tests",
 		"module": "NodeNext",
 		"moduleResolution": "NodeNext",
 		"experimentalDecorators": true,
@@ -10,6 +11,7 @@
 		"resolveJsonModule": true,
 		"allowJs": true,
 		"target": "es6",
+		"types": ["jest"],
 		"paths": {
 			"@adapters/*": ["src/application/adapters/*"],
 			"@controllers/*": ["src/application/controllers/*"],
@@ -25,5 +27,6 @@
 			"@gateways/*": ["src/interfaces/gateways/*"]
 		},
 		"baseUrl": "./"
-	}
+	},
+	"include": ["src/**/*.ts", "tests/**/*.ts"],
 }
