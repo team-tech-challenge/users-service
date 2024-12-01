@@ -1,4 +1,4 @@
-import { isValidEmail } from "../../../src/application/utils/valid";
+import { isValidEmail } from "@utils/valid";
 
 describe('Email Validator', () => {
 	it('should check if email is correctly', () => {
