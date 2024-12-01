@@ -25,6 +25,20 @@ export class CustomerController {
 		}
 	}
 
+	async getCustomerById(req, res): Promise<void> {
+		try {
+			const { id } = req.params;
+			const customer = await this.customerUseCase.getCustomerById(id);
+			if (customer) {
+				res.json(customer);
+			} else {
+				res.status(404).json({ error: "Customer not found" });
+			}
+		} catch (error) {
+			res.status(400).json({ error: error.message });
+		}
+	}
+
 	async searchCustomer(req, res): Promise<void> {
 		try {
 			const { cpf } = req.params;

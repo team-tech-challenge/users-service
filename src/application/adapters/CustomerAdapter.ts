@@ -2,6 +2,7 @@ import { ICustomerGateway } from "@gateways/ICustomerGateway";
 import { Customer as CustomerModel } from "@database/CustomerModel";
 import { Customer } from "@entities/Customer";
 import { CustomerMapper } from "@mappers/CustomerMapper";
+import { searchCampaignCustomer } from "src/infrastructure/external/api/Campaign";
 
 export class CustomerAdapter implements ICustomerGateway {
 	async allCustomers(): Promise<Customer[]> {
@@ -64,7 +65,13 @@ export class CustomerAdapter implements ICustomerGateway {
 		// const campaignCustomers = await CampaignCustomerModel.findAll({
 		//     where: { customerId: customerId }
 		// });
-		const campaignCustomers = [];
-		return campaignCustomers.map(campaignCustomer => campaignCustomer.toJSON());
+		try {			
+			const campaign = await searchCampaignCustomer(customerId);
+
+			return campaign;
+		} catch (error) {
+			console.error("Error fetching order:", error.message);
+			return null;
+		}
 	}
 }

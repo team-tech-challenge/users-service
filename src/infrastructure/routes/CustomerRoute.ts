@@ -33,6 +33,15 @@ customerRoute.post("/create", (req, res) => {
 	customerController.createCustomer(req, res);
 });
 
+customerRoute.get("/:id", (req, res) => {
+	// #swagger.tags = ['Customer']
+	/* #swagger.responses[200] = {
+            description: 'Search customer by ID',
+            schema: { $ref: '#/definitions/Customer' }
+    } */
+	customerController.getCustomerById(req, res);
+});
+
 customerRoute.get("/search/:cpf", (req, res) => {
 	// #swagger.tags = ['Customer']
 	/* #swagger.responses[200] = {
