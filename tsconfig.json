@@ -3,6 +3,7 @@
 	  "require": ["tsconfig-paths/register"]
 	},
 	"compilerOptions": {
+	  "esModuleInterop": true,
 	  "outDir": "./dist-tests",
 	  "module": "NodeNext",
 	  "moduleResolution": "NodeNext",
