@@ -35,9 +35,6 @@ export class Customer {
 	}
 
 	public setName(name: string): void {
-		if (!name) {
-			throw new Error("Name cannot be empty");
-		}
 		this.name = name;
 	}
 
