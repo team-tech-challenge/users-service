@@ -13,7 +13,7 @@ spec:
   project: default
   source:
     repoURL: 'https://github.com/team-tech-challenge/tech-challenge-manifest.git'
-    targetRevision: service_campaign
+    targetRevision: HEAD
     path: users-service/kustomize/overlays/prd
     kustomize: {}
   destination:
