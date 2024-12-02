@@ -1,5 +1,5 @@
 // @ts-ignore
-import EmployeeAdapter from '../../adapters/EmployeeAdapter';
+import EmployeeAdapter from '@adapters/EmployeeAdapter';
 
 describe('EmployeeAdapter', () => {
 	it('deve adaptar dados brutos para uma entidade Employee', () => {
