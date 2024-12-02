@@ -1,5 +1,5 @@
 // @ts-ignore
-import CustomerModel from '../../models/CustomerModel';
+import CustomerModel from '@models/CustomerModel';
 
 describe('CustomerModel', () => {
 	it('deve criar uma instância de cliente', () => {

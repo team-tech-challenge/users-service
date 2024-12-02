@@ -1,5 +1,5 @@
 // @ts-ignore
-import EmployeeModel from '../../models/EmployeeModel';
+import EmployeeModel from '@models/EmployeeModel';
 
 describe('EmployeeModel', () => {
 	it('deve criar uma instância de funcionário', () => {
