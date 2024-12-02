@@ -65,7 +65,7 @@ jobs:
 
     change-tag:
         needs: apps-argocd
-        uses: team-tech-challenge/terraform-reusable-actions/.github/workflows/create-argocd-kustomization.yml@create_new_workflow_with_kustomization
+        uses: team-tech-challenge/terraform-reusable-actions/.github/workflows/create-argocd-kustomization.yml@main
         with:
             destination_repo: 'team-tech-challenge/tech-challenge-manifest'
             destination_branch: 'service_campaign'
