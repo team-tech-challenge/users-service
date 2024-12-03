@@ -17,12 +17,6 @@ jobs:
             node_version: "18"
             test_command: "npm test"
 
-    #    scanner-sonar:
-    #        uses: team-tech-challenge/terraform-reusable-actions/.github/workflows/sonarqube-scanner.yml@create_new_workflow_with_kustomization
-    #        secrets:
-    #            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-    #            SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-
     create-ecr:
         needs: test-workflow
         uses: team-tech-challenge/terraform-reusable-actions/.github/workflows/create-elastic-container-registry.yml@main
@@ -68,7 +62,7 @@ jobs:
         uses: team-tech-challenge/terraform-reusable-actions/.github/workflows/create-argocd-kustomization.yml@main
         with:
             destination_repo: 'team-tech-challenge/tech-challenge-manifest'
-            destination_branch: 'service_campaign'
+            destination_branch: 'main'
             kustomize_directory: 'users-service/kustomize/overlays/prd'
         secrets:
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
