@@ -4,223 +4,218 @@ import { Customer } from '@entities/Customer';
 import { handleError } from '@utils/http';
 
 jest.mock('@usecases/CustomerUseCase');
-jest.mock('@utils/http');
+jest.mock('@utils/http', () => ({
+	handleError: jest.fn(),
+  }));
+  
+
+const mockedCustomerUseCase = new CustomerUseCase(null) as jest.Mocked<CustomerUseCase>;
+
+const mockRequest = (body = {}, params = {}) => ({
+  body,
+  params,
+});
+
+const mockResponse = () => {
+  const res = {
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn().mockReturnThis(),
+  };
+  return res;
+};
+
+function generateValidCpf(): string {
+  return '12345678909'; // Um CPF válido de exemplo
+}
 
 describe('CustomerController', () => {
-	let customerController: CustomerController;
-	let customerUseCaseMock: jest.Mocked<CustomerUseCase>;
+  let controller: CustomerController;
 
-	beforeEach(() => {
-		customerUseCaseMock = new CustomerUseCase(null) as jest.Mocked<CustomerUseCase>;
-		customerController = new CustomerController(customerUseCaseMock);
-	});
+  beforeEach(() => {
+    controller = new CustomerController(mockedCustomerUseCase);
+    jest.clearAllMocks();
+  });
 
-	describe('getAll', () => {
-		it('deve retornar todos os clientes com sucesso', async () => {
-			const mockCustomers = [
-				new Customer('78542341082', 'John Doe', '123456789', 'john.doe@email.com'),
-			];
-			customerUseCaseMock.getAll.mockResolvedValue(mockCustomers);
+  it('should get all customers', async () => {
+    const customers = [new Customer(generateValidCpf(), 'John Doe', '123456789', 'john@example.com')];
+    mockedCustomerUseCase.getAll.mockResolvedValue(customers);
 
-			const req = {};
-			const res = {
-				status: jest.fn().mockReturnThis(),
-				json: jest.fn(),
-			};
+    const req = mockRequest();
+    const res = mockResponse();
 
-			await customerController.getAll(req, res);
+    await controller.getAll(req, res);
 
-			expect(res.status).toHaveBeenCalledWith(200);
-			expect(res.json).toHaveBeenCalledWith(mockCustomers);
-		});
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(customers);
+  });
 
-		it('deve retornar erro ao buscar todos os clientes', async () => {
-			const error = new Error('Database error');
-			customerUseCaseMock.getAll.mockRejectedValue(error);
+  it('should handle error in getAll', async () => {
+    const error = new Error('Test Error');
+    mockedCustomerUseCase.getAll.mockRejectedValue(error);
 
-			const req = {};
-			const res = {
-				status: jest.fn().mockReturnThis(),
-				json: jest.fn(),
-			};
+    const req = mockRequest();
+    const res = mockResponse();
 
-			await customerController.getAll(req, res);
+    await controller.getAll(req, res);
 
-			expect(handleError).toHaveBeenCalledWith(res, error);
-		});
-	});
+    expect(handleError).toHaveBeenCalledWith(res, error);
+  });
 
-	describe('createCustomer', () => {
-		it('deve criar um novo cliente com sucesso', async () => {
-			const newCustomer = new Customer('78542341082', 'John Doe', '123456789', 'john.doe@email.com');
-			customerUseCaseMock.createCustomer.mockResolvedValue(newCustomer);
+  it('should create a new customer', async () => {
+    const customerData = { cpf: generateValidCpf(), name: 'John Doe', phoneNumber: '123456789', email: 'john@example.com' };
+    const customer = new Customer(generateValidCpf(), 'John Doe', '123456789', 'john@example.com');
+    mockedCustomerUseCase.createCustomer.mockResolvedValue(customer);
 
-			const req = {
-				body: { cpf: '78542341082', name: 'John Doe', phoneNumber: '123456789', email: 'john.doe@email.com' },
-			};
-			const res = {
-				status: jest.fn().mockReturnThis(),
-				json: jest.fn(),
-			};
+    const req = mockRequest(customerData);
+    const res = mockResponse();
 
-			await customerController.createCustomer(req, res);
+    await controller.createCustomer(req, res);
 
-			expect(res.status).toHaveBeenCalledWith(201);
-			expect(res.json).toHaveBeenCalledWith(newCustomer);
-		});
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.json).toHaveBeenCalledWith(customer);
+  });
 
-		it('deve retornar erro ao criar um novo cliente', async () => {
-			const error = new Error('Invalid data');
-			customerUseCaseMock.createCustomer.mockRejectedValue(error);
+  it('should handle error in createCustomer', async () => {
+    const error = new Error('Test Error');
+    mockedCustomerUseCase.createCustomer.mockRejectedValue(error);
 
-			const req = {
-				body: { cpf: '78542341082', name: 'John Doe', phoneNumber: '123456789', email: 'john.doe@email.com' },
-			};
-			const res = {
-				status: jest.fn().mockReturnThis(),
-				json: jest.fn(),
-			};
+    const req = mockRequest();
+    const res = mockResponse();
 
-			await customerController.createCustomer(req, res);
+    await controller.createCustomer(req, res);
 
-			expect(handleError).toHaveBeenCalledWith(res, error);
-		});
-	});
+    expect(handleError).toHaveBeenCalledWith(res, error);
+  });
 
-	describe('searchCustomer', () => {
-		it('deve retornar um cliente pelo CPF', async () => {
-			const customerData = new Customer('78542341082', 'John Doe', '123456789', 'john.doe@email.com');
-			customerUseCaseMock.searchCustomer.mockResolvedValue(customerData);
+  it('should get a customer by ID', async () => {
+    const customer = new Customer(generateValidCpf(), 'John Doe', '123456789', 'john@example.com');
+    mockedCustomerUseCase.getCustomerById.mockResolvedValue(customer);
 
-			const req = { params: { cpf: '78542341082' } };
-			const res = {
-				status: jest.fn().mockReturnThis(),
-				json: jest.fn(),
-			};
+    const req = mockRequest({}, { id: '1' });
+    const res = mockResponse();
 
-			await customerController.searchCustomer(req, res);
+    await controller.getCustomerById(req, res);
 
-			expect(res.status).toHaveBeenCalledWith(200);
-			expect(res.json).toHaveBeenCalledWith(customerData);
-		});
+    expect(res.json).toHaveBeenCalledWith(customer);
+  });
 
-		it('deve retornar erro ao buscar cliente por CPF', async () => {
-			const error = new Error('Customer not found');
-			customerUseCaseMock.searchCustomer.mockRejectedValue(error);
+  it('should handle customer not found in getCustomerById', async () => {
+    mockedCustomerUseCase.getCustomerById.mockResolvedValue(null);
 
-			const req = { params: { cpf: '78542341082' } };
-			const res = {
-				status: jest.fn().mockReturnThis(),
-				json: jest.fn(),
-			};
+    const req = mockRequest({}, { id: '1' });
+    const res = mockResponse();
 
-			await customerController.searchCustomer(req, res);
+    await controller.getCustomerById(req, res);
 
-			expect(handleError).toHaveBeenCalledWith(res, error);
-		});
-	});
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ error: 'Customer not found' });
+  });
 
-	describe('updateCustomer', () => {
-		it('deve atualizar o cliente com sucesso', async () => {
-			const customerData = new Customer('78542341082', 'John D.', '987654321', 'john.d@email.com');
-			customerUseCaseMock.updateCustomer.mockResolvedValue();
+  it('should handle error in getCustomerById', async () => {
+    const error = new Error('Test Error');
+    mockedCustomerUseCase.getCustomerById.mockRejectedValue(error);
 
-			const req = {
-				params: { id: '1' },
-				body: { cpf: '78542341082', name: 'John D.', phoneNumber: '987654321', email: 'john.d@email.com' },
-			};
-			const res = {
-				status: jest.fn().mockReturnThis(),
-				json: jest.fn(),
-			};
+    const req = mockRequest({}, { id: '1' });
+    const res = mockResponse();
 
-			await customerController.updateCustomer(req, res);
+    await controller.getCustomerById(req, res);
 
-			expect(res.status).toHaveBeenCalledWith(200);
-			expect(res.json).toHaveBeenCalledWith({ message: 'Customer updated successfully' });
-		});
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ error: error.message });
+  });
 
-		it('deve retornar erro ao tentar atualizar cliente', async () => {
-			const error = new Error('Customer not found');
-			customerUseCaseMock.updateCustomer.mockRejectedValue(error);
+  it('should search a customer by CPF', async () => {
+    const customer = new Customer(generateValidCpf(), 'John Doe', '123456789', 'john@example.com');
+    mockedCustomerUseCase.searchCustomer.mockResolvedValue(customer);
 
-			const req = {
-				params: { id: '999' },
-				body: { cpf: '78542341082', name: 'John D.', phoneNumber: '987654321', email: 'john.d@email.com' },
-			};
-			const res = {
-				status: jest.fn().mockReturnThis(),
-				json: jest.fn(),
-			};
+    const req = mockRequest({}, { cpf: generateValidCpf() });
+    const res = mockResponse();
 
-			await customerController.updateCustomer(req, res);
+    await controller.searchCustomer(req, res);
 
-			expect(handleError).toHaveBeenCalledWith(res, error);
-		});
-	});
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(customer);
+  });
 
-	describe('deleteCustomer', () => {
-		it('deve deletar o cliente com sucesso', async () => {
-			customerUseCaseMock.deleteCustomer.mockResolvedValue();
+  it('should handle error in searchCustomer', async () => {
+    const error = new Error('Test Error');
+    mockedCustomerUseCase.searchCustomer.mockRejectedValue(error);
 
-			const req = { params: { id: '1' } };
-			const res = {
-				status: jest.fn().mockReturnThis(),
-				json: jest.fn(),
-			};
+    const req = mockRequest({}, { cpf: generateValidCpf() });
+    const res = mockResponse();
 
-			await customerController.deleteCustomer(req, res);
+    await controller.searchCustomer(req, res);
 
-			expect(res.status).toHaveBeenCalledWith(200);
-			expect(res.json).toHaveBeenCalledWith({ message: 'Customer deleted successfully' });
-		});
+    expect(handleError).toHaveBeenCalledWith(res, error);
+  });
 
-		it('deve retornar erro ao tentar excluir o cliente', async () => {
-			const error = new Error('Customer not found');
-			customerUseCaseMock.deleteCustomer.mockRejectedValue(error);
+  it('should update a customer', async () => {
+    const customerData = { cpf: generateValidCpf(), name: 'John Doe', phoneNumber: '123456789', email: 'john@example.com' };
+    const req = mockRequest(customerData, { id: '1' });
+    const res = mockResponse();
 
-			const req = { params: { id: '999' } };
-			const res = {
-				status: jest.fn().mockReturnThis(),
-				json: jest.fn(),
-			};
+    await controller.updateCustomer(req, res);
 
-			await customerController.deleteCustomer(req, res);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Customer updated successfully' });
+  });
 
-			expect(handleError).toHaveBeenCalledWith(res, error);
-		});
-	});
+  it('should handle error in updateCustomer', async () => {
+    const error = new Error('Test Error');
+    mockedCustomerUseCase.updateCustomer.mockRejectedValue(error);
 
-	describe('getCustomerCampaigns', () => {
-		it('deve retornar as campanhas do cliente com sucesso', async () => {
-			const mockCampaigns = [{ id: 1, name: 'Campaign 1' }];
-			customerUseCaseMock.getCustomerCampaigns.mockResolvedValue(mockCampaigns);
+    const req = mockRequest({}, { id: '1' });
+    const res = mockResponse();
 
-			const req = { params: { id: '1' } };
-			const res = {
-				status: jest.fn().mockReturnThis(),
-				json: jest.fn(),
-			};
+    await controller.updateCustomer(req, res);
 
-			await customerController.getCustomerCampaigns(req, res);
+    expect(handleError).toHaveBeenCalledWith(res, error);
+  });
 
-			expect(res.status).toHaveBeenCalledWith(200);
-			expect(res.json).toHaveBeenCalledWith(mockCampaigns);
-		});
+  it('should delete a customer', async () => {
+    const req = mockRequest({}, { id: '1' });
+    const res = mockResponse();
 
-		it('deve retornar erro ao buscar campanhas do cliente', async () => {
-			const error = new Error('Campaigns not found');
-			customerUseCaseMock.getCustomerCampaigns.mockRejectedValue(error);
+    await controller.deleteCustomer(req, res);
 
-			const req = { params: { id: '999' } };
-			const res = {
-				status: jest.fn().mockReturnThis(),
-				json: jest.fn(),
-			};
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Customer deleted successfully' });
+  });
 
-			await customerController.getCustomerCampaigns(req, res);
+  it('should handle error in deleteCustomer', async () => {
+    const error = new Error('Test Error');
+    mockedCustomerUseCase.deleteCustomer.mockRejectedValue(error);
 
-			expect(handleError).toHaveBeenCalledWith(res, error);
-		});
-	});
+    const req = mockRequest({}, { id: '1' });
+    const res = mockResponse();
+
+    await controller.deleteCustomer(req, res);
+
+    expect(handleError).toHaveBeenCalledWith(res, error);
+  });
+
+  it('should get campaigns for a customer by ID', async () => {
+    const campaigns = [{ id: 1, name: 'Campaign 1' }];
+    mockedCustomerUseCase.getCustomerCampaigns.mockResolvedValue(campaigns);
+
+    const req = mockRequest({}, { id: '1' });
+    const res = mockResponse();
+
+    await controller.getCustomerCampaigns(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(campaigns);
+  });
+
+  it('should handle error in getCustomerCampaigns', async () => {
+    const error = new Error('Test Error');
+    mockedCustomerUseCase.getCustomerCampaigns.mockRejectedValue(error);
+
+    const req = mockRequest({}, { id: '1' });
+    const res = mockResponse();
+
+    await controller.getCustomerCampaigns(req, res);
+
+    expect(handleError).toHaveBeenCalledWith(res, error);
+  });
 });
